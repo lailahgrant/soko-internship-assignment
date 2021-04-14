@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- boxicons -->
+    <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+
+    <title>products - Solo Ecommerce Assignment</title>
+</head>
+<body>
+    
+    <header class="header" id="header">
+
+                <p class="who">Shop made with Lailah</p>
+    
+                <div class="header__container">
+                    <span class="header__logo"></span>
+                    <h2 class="header__title">Target <br> <p class="header__title-sub">Cham Towers Plot 12 Nkurumah Rd,Kampala Uganda</p> </h2>
+                    
+                    <div class="header__container-icons">
+                        <i class="header__container-icon bx bx-shopping-bag"> <div class="cart-items middle">0</div> Bag</i>
+                        <i class="header__container-icon bx bxs-credit-card-front" >Order</i>
+                    </div>
+    
+                </div>
+    
+            </header>
+
+    <div class="grid-container">
+		<div class="item">
+
+            <!--Start of products-->
+            <section class="products__section"> 
+                <div class="products__title">
+                    <h2>Our Products</h2>
+                </div>
+
+                <div class="products-center">
+
+                    <!--  Single Product  -->
+                    <article class="product__">
+                        <div class="img__container">
+                            <img class="product__img" src="images/products/food/food.jpg" alt="Plate of salads">
+                            <button class="bag-btn" data-id="1">
+                                <i class="bx bx-shopping-bag"></i>
+                                Add to bag
+                            </button>
+                        </div>
+                        <h3>Plate of salads</h3>
+                        <h4>UGX 15,500</h4>
+                    </article>
+                    <!--End of  Single Product  -->
+
+                </div>
+
+            </section>  <!--End of products-->
+
+            <!-- Start of Cart -->
+            <!--left side is an overlay, the right is the cart-->
+            <div class="cart-overlay">
+                <div class="cart">
+                <!-- close button -->
+                <span class="close-cart">
+                    <i class="bx bx-window-close"></i>
+                </span>
+
+                <!-- cart content -->
+                <h2>Your cart</h2>
+
+                <div class="cart-content">
+
+                    <!-- cart item  -->
+
+                    <div class="cart-item">
+                        <img src="./images/products/headphone/headphone1.jpeg" alt="Headphone" >
+                    
+
+                    <div>
+                        <h4>Headphone</h4>
+                        <h5>UGX 150,000</h5>
+                        <span class="remove-item">remove</span>
+                    </div>
+
+                    <div>
+                        <i class="bx bx-chevron-up"></i>
+                        <p class="item-amount">1</p>
+                        <i class="bx bx-chevron-down"></i>
+                    </div>
+
+                    </div><!-- end of  cart item  -->
+                </div> 
+
+                <!-- cart footer -->
+                <div class="cart-footer">
+                    <h3>Your total : UGX <span class="cart-total">0</span> </h3>
+                    <button class="clear-cart banner-btn">Clear cart</button>
+                </div>
+                <!--end of cart footer -->
+
+            </div>
+
+        </div>   <!--End of cart-->
+
+        </div>
+
+    </div>    
+            
+
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
