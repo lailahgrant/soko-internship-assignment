@@ -1,0 +1,26 @@
+{
+    "items": [
+        {
+        "sys": {"id": "1"},
+        "fields": {
+            "title": "Plate of Dessert",
+            "price": 145000,
+            "image": {"fields": {"file": {
+                "url": "./images/products/food/food1.jpg"
+            }}}
+        }
+        },
+
+        {
+            "sys": {"id" : "2"},
+            "fields" : {
+                "title": "Plate of Salads",
+                "price" : 50000,
+                "image" :{"fields":{"file":{
+                    "url":"./images/products/food/food.jpg"
+                }}}
+            }
+        }
+    
+    ]
+}
