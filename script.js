@@ -101,6 +101,13 @@ class UI{
 
 //local storage
 class Storage{ //classes are in the sugar syntax
+    
+//create a static method & this can be used without instantiating its class (creating an instance from the class)
+    static saveProducts(products) {
+        //can access local storage
+        //setItem() method, pass a set of "key :pair" value & need to stringfy it bse need to save it as a string and then as an array
+        localStorage.setItem("products", JSON.stringify(products));
+    }
 
 }
 
@@ -118,9 +125,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // products.getProducts().then(products => { console.log(products) });
     
     //need to display content on the screen (ui) & not console - then we use ui.displayProducts(call the function in the class UI)
-    products.getProducts().then(products => ui.displayProducts(products));
+    products.getProducts().then(products => {
+        ui.displayProducts(products);
 
-
+        //storage - for cases of viewing only one item in places like the product "in cart" - go to inspect on browser, Application, local storage
+        //Storage class has a static method hence no instance created, jusr use the class as follows
+        Storage.saveProducts(products);
+    });
+    
 });
 
 
