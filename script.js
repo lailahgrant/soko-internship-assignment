@@ -106,6 +106,7 @@ class Storage{ //classes are in the sugar syntax
     static saveProducts(products) {
         //can access local storage
         //setItem() method, pass a set of "key :pair" value & need to stringfy it bse need to save it as a string and then as an array
+        //local storage to help view products in cart even when one refreshes
         localStorage.setItem("products", JSON.stringify(products));
     }
 
