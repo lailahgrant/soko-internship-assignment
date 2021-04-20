@@ -545,8 +545,17 @@ header::after {
 }
 
 .remove-item{
-  color: var(--dark-color-lighten);
+  color: var(--dark-color);
   cursor: pointer;
+}
+
+.banner-btn{
+  background: var(--footer-color);
+    border: none;
+    text-transform: uppercase;
+    padding: 0.5rem 0.75rem;
+    font-weight: var(--font-semi-bold);
+    color: var(--white-color);
 }
 
 .bx-chevron-up, .bx-chevron-down{

@@ -6,7 +6,7 @@ const closeCartBtn = document.querySelector('.close-cart');
 const clearCartBtn = document.querySelector('.clear-cart');
 const cartDOM = document.querySelector('.cart');
 const cartOverlay = document.querySelector(".cart-overlay");
-const cartItems = document.querySelector("cart-items");
+const cartItems = document.querySelector(".cart-items");
 const cartTotal = document.querySelector(".cart-total");
 const cartContent = document.querySelector(".cart-content");
 const productsDOM = document.querySelector(".products-center");
@@ -18,6 +18,9 @@ const productsDOM = document.querySelector(".products-center");
 //create a variable that is at 1st an empty array
 //its the main cart -where we'll be placing information, getting information from local storage.
 let cart = [];
+
+//once the cart is cleared, button should be set back to initial empty
+let buttonsDOM = [];
 
 //setup  classes - where we'll have methods
 //class for getting products from the data.json
@@ -92,7 +95,7 @@ class UI{
                             </button>
                         </div>
                         <h3>${product.title}</h3>
-                        <h4>${product.price}</h4>
+                        <h4>UGX &nbsp; ${product.price}</h4>
                     </article>
                     <!--End of  Single Product  -->
             `
@@ -102,13 +105,140 @@ class UI{
         productsDOM.innerHTML = result;
     }
 
-    getBagButtons() {
+    getBagButtons() { 
         //select the buttons - treat them as an array using a Spread operator 
         const buttons = [...document.querySelectorAll(".bag-btn")]; //spread operator & [] turns it in an array
-        console.log(buttons); //returns number of buttons ie. if they are 4 pdts then there are 4 btns
+        //console.log(buttons); //returns number of buttons ie. if they are 4 pdts then there are 4 btns
+
+        //assign buttons to buttonsDOM
+        buttonsDOM = buttons;
+
+        // for the buttons, used ids to select them
+        buttons.forEach(button => {
+            //foreach button, get the id
+            let id = button.dataset.id;  //get an id of ech button that is on the data-id( dataset )
+            //console.log(id);
+
+            //check if an product is in the cart - did this by setting a method in local storage & the moment we load the page, the method will add content to the cart =[] variable
+            let inCart = cart.find(item => item.id === id);   //cart empty is empty now //used find method then an arrow fn to compare item id to the pdt id
+            //if
+            if (inCart) {//if item is in the cart, 
+                //make the button incative
+                button.disabled = true;
+                //change button text to inCart
+                button.innerText = "In Cart";
+            }// else { - remove the else
+            //set a click on the button & an event on the arrow fn
+            button.addEventListener('click', (e) => {
+                //don't add a button text
+                //leave the button active
+                //console.log(e);
+
+                //add an item to the cart
+                e.target.innerText = "In Cart";
+                e.target.disabled = true;
+
+                //a) now get the product from the products in local storage
+                //let cartItem =  Storage.getProduct(id);
+                //console.log(cartItem); //returns all the information when the button "Add to cart" is clicked on any product
+                //destructure using spread operator, send and pass it in the cart=[] variable
+                //object
+                let cartItem = { ...Storage.getProduct(id), amount: 1 }; //amount:1 property is the one used to control quantity of products in the cart
+                //console.log(cartItem); //this returns the product info and also add the amount:1 property
+
+
+                //b) add product to the cart - add to empty cart=[] array
+                cart = [...cart, cartItem]; //add all items you initially have in a cart(empty) and those that are just selected in the above (a)
+                //console.log(cart);
+
+
+                //c) save cart in the local storage
+                Storage.saveCart(cart); //saveCart method is in Storage class
+
+
+                //d) set cart values - when the "Add to cart" is clicked, increase the number of the Bag icon in the header
+                this.setCartValues(cart);
+
+
+                //e) display cart item / add items to the DOM
+                //argument as cartItem
+                this.addCartItem(cartItem); //we have the item as cartItem got from the Storage.getProduct(id)
+
+
+                //f) when add to cart is clicked, show the cart in the cart overlay
+                this.showCart(); //call method name
+
+                    
+            });
+            //}
+
+        });
+
         
 
+
     }
+    //create the setCartValue method after the getBagButtons
+    setCartValues(cart) {
+        //if I save the item in the cart in any of the storages, map through item
+        let tempTotal = 0;
+        let itemsTotal = 0;
+        //map through items
+        cart.map(item => {
+            //each item in the cart will have a price and amount, and amount on its own
+            //add cart total for each iteration
+            tempTotal += item.price * item.amount;
+            itemsTotal += item.amount;
+        });
+        //update cartItems and cartTotal
+        //cart total in the overlay
+        cartTotal.innerText = parseInt(tempTotal);
+        //cartTotal.innerText = parseFloat(tempTotal.toFixed(2));//if you have prices with decimals
+
+        //cart items - bag icon with  a figure in the header
+        cartItems.innerText = itemsTotal;
+
+        //console.log(cartTotal, cartItems);
+    }
+
+    //parameter as item
+    addCartItem(item) { //looking for the item to pass
+        //create a div
+        const div = document.createElement('div');
+        //in product.html, have a cart-item class
+        div.classList.add('cart-item');
+        //dynamically add these 
+        //for the remove, chevron-up & down , add data-id=${item.id}
+        //for the anount, add 
+        div.innerHTML = `
+            <img src=${item.image} alt="Headphone" >
+                    
+
+                    <div>
+                        <h4>${item.title}</h4>
+                        <h5>UGX ${item.price}</h5>
+                        <span class="remove-item" data-id=${item.id} >remove</span>
+                    </div>
+        
+                    <div>
+                        <i class="bx bx-chevron-up" data-id=${item.id} ></i>
+                        <p class="item-amount">${item.amount}</p>
+                        <i class="bx bx-chevron-down" data-id=${item.id} ></i>
+                    </div>
+        `;
+
+         //append the cartContent
+        cartContent.appendChild(div);
+        //console.log(cartContent);
+    }
+
+    showCart() {
+        cartOverlay.classList.add('transparentBcg');
+        cartDOM.classList.add('showCart');
+    }
+   
+
+
 }
 
 //local storage
@@ -120,6 +250,24 @@ class Storage{ //classes are in the sugar syntax
         //setItem() method, pass a set of "key :pair" value & need to stringfy it bse need to save it as a string and then as an array
         //local storage to help view products in cart even when one refreshes
         localStorage.setItem("products", JSON.stringify(products));
+    }
+
+    //static method of getProduct
+    static getProduct(id) { //id is from buttons
+
+        //parse it from string   - then get it... 
+        //in saveproducts it is set & now here its get.
+        //this returns the array in the local storage
+        let products = JSON.parse(localStorage.getItem('products'));
+        //set it up using:-
+        return products.find(product => product.id === id);
+
+
+    }
+
+    //
+    static saveCart(cart) {
+        localStorage.setItem('cart', JSON.stringify(cart)); //check application, local storage in the inspect, click on the "add to cart" btn 
     }
 
 }
