@@ -20,6 +20,28 @@
                     "url":"./images/products/food/food.jpg"
                 }}}
             }
+        },
+
+        {
+            "sys":{"id":"3"},
+            "fields":{
+                "title":"3 course meal",
+                "price":250000,
+                "image":{"fields":{"file":{
+                    "url":"./images/products/food/food2.jpg"
+                }}}
+            }
+        },
+
+        {
+            "sys":{"id":"3"},
+            "fields":{
+                "title":"Plates of Salads and greens",
+                "price":370000,
+                "image":{"fields":{"file":{
+                    "url":"./images/products/food/food3.jpg"
+                }}}
+            }
         }
     
     ]

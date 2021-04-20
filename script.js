@@ -10,9 +10,13 @@ const cartItems = document.querySelector("cart-items");
 const cartTotal = document.querySelector(".cart-total");
 const cartContent = document.querySelector(".cart-content");
 const productsDOM = document.querySelector(".products-center");
+//to target the buttons of "Add to cart" on the products images ????
+        //1st get the buttons & make variables - gets all buttons with class bag-btn
+//const btns = document.querySelectorAll(".bag-btn"); - this gives a NodeList, well will be using an array in the class UI
+//console.log(btns); //console display is NodeList that is empty  ! why? because selecting the buttons without anything loading.
 
 //create a variable that is at 1st an empty array
-//its the main cart -where we'll be placing informstion, getting information from local storage.
+//its the main cart -where we'll be placing information, getting information from local storage.
 let cart = [];
 
 //setup  classes - where we'll have methods
@@ -97,6 +101,14 @@ class UI{
         //insert the products into the productsDOM(from the variables above)
         productsDOM.innerHTML = result;
     }
+
+    getBagButtons() {
+        //select the buttons - treat them as an array using a Spread operator 
+        const buttons = [...document.querySelectorAll(".bag-btn")]; //spread operator & [] turns it in an array
+        console.log(buttons); //returns number of buttons ie. if they are 4 pdts then there are 4 btns
+        
+
+    }
 }
 
 //local storage
@@ -132,7 +144,17 @@ document.addEventListener("DOMContentLoaded", () => {
         //storage - for cases of viewing only one item in places like the product "in cart" - go to inspect on browser, Application, local storage
         //Storage class has a static method hence no instance created, jusr use the class as follows
         Storage.saveProducts(products);
-    });
+
+        //keep cart information in local storage so that even on refresh, products in the cart aren't lost
+
+        //to target the buttons of "Add to cart" on the products images ????
+        //1st get the buttons & make variables
+        //can chain up the .then inorder to show content on these buttons
+        
+    }).then(() => {//these buttons load after displayproducts and saveproducts are loaded.
+        //pass an arrow fn & in it pass 2 
+        ui.getBagButtons(); //call the method from class
+    }); 
     
 });
 
