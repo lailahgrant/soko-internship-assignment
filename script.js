@@ -167,6 +167,7 @@ class UI{
 
                 //f) when add to cart is clicked, show the cart in the cart overlay
                 this.showCart(); //call method name
+                //cart is hidden in css & this method shows it
 
                     
             });
@@ -228,10 +229,11 @@ class UI{
         `;
 
          //append the cartContent
-        cartContent.appendChild(div);
+        cartContent.appendChild(div); //adds item to the shopping bag 
         //console.log(cartContent);
     }
 
+    //method - no parameters or argumwnts
     showCart() {
         cartOverlay.classList.add('transparentBcg');
         cartDOM.classList.add('showCart');
