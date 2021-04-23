@@ -1,7 +1,7 @@
 //select elements and assign them to variable inorder to reuse them
 //variables
 
-const cartBtn = document.querySelector('.bag-btn');
+const cartBtn = document.querySelector('.cart-btn');
 const closeCartBtn = document.querySelector('.close-cart');
 const clearCartBtn = document.querySelector('.clear-cart');
 const cartDOM = document.querySelector('.cart');
@@ -235,11 +235,78 @@ class UI{
 
     //method - no parameters or argumwnts
     showCart() {
+        //adding 2 classes to the elements
         cartOverlay.classList.add('transparentBcg');
         cartDOM.classList.add('showCart');
     }
    
+    //setup application - method - show, hide cart - acrt overlay, close btn 
+    setupAPP() {
+        //cart[] - moment the appn loads, the cart array will be assigned values from the storage
+        cart = Storage.getCart(); //get this from the local storage
+        //upon appn loading,I setup the values that will be in DOM - could be total items or cart total
+        this.setCartValues(cart);
+        //
+        this.populateCart(cart);
 
+        //setup event listener - cart button to show cart, see the cart when cart is loaded for opening the cart and closing the cart
+        cartBtn.addEventListener('click', this.showCart);  //call back fn in the addEventLis..()
+        closeCartBtn.addEventListener('click', this.hideCart);
+    }
+
+    //looking for an argument of array
+    populateCart(cart) {
+        //use foreach for an array
+         //loop through the whole cart
+        cart.forEach(item => this.addCartItem(item)); //
+    }
+
+    //hidecart - remove the classes that were added in the showCart method
+    hideCart() {
+        //remove classes on the elements - this is for the cart X close button
+        cartOverlay.classList.remove("transparentBcg");
+        cartDOM.classList.remove("showCart");
+    }
+
+    //setup cart Logic - call it from the document.add....
+    //setup clear cart button, event for removing a cart, reducing or increasing the amount of pdt in the cart
+    cartLogic() {
+        //clear cart btn
+        clearCartBtn.addEventListener("click", () => {
+            this.clearCart(); //now this points to the UI class and not just the button like the commented code below
+            //this helps us access anything in the class
+        });
+        // clearCartBtn.addEventListener('click', this.clearCart); //in the call back fn, call a method referencing a btn
+    }
+
+    //clearCart in the call back fn of event handler above
+    clearCart() {
+        //console.log(this);
+        //to clear the cart, would like to 1st select all the items' ids in the cart
+        let cartItems = cart.map(item => item.id); //getting all items
+        //console.log(cartItems);
+        //loop through the array with cartItems, call another method(haven't created it yet but will create it next) which will have removing of these items  in the cart
+        cartItems.forEach(id => this.removeItem(id))
+    }
+
+    removeItem(id) {
+        //to remove item in car, have to filter the items in the cart
+        cart = cart.filter(item => item.id !== id);//return only when the cartItem isn't = to the id
+        //set the cart total values to 0 once the cart is cleared
+        this.setCartValues(cart);
+        //get the latest info of cart emptiness when cart cleared
+        Storage.saveCart(cart);
+        
+        //access the buttons of Add to cart from the incart
+        //set another method - for reusing
+        let button = this.getSingleButton(id);
+
+    }
+
+    getSingleButton(id) {
+        return buttonsDOM.find(button => button.dataset.id === id);  
+    }
+    
 
 }
 
@@ -272,6 +339,15 @@ class Storage{ //classes are in the sugar syntax
         localStorage.setItem('cart', JSON.stringify(cart)); //check application, local storage in the inspect, click on the "add to cart" btn 
     }
 
+    //setupp Application will be assigned values from the storage
+    static getCart() {
+        //return a value using an itenary operator / if else
+        //1st check if the item in the local storage exists or not
+        //if this is true, 1st statement after ? is executed &
+        //if it's not true, an empty array is returned.
+        return localStorage.getItem('cart') ? JSON.parse(localStorage.getItem("cart")) : [];
+    }
+
 }
 
 //setup an event listener - event listener name is DOMContentLoaded
@@ -281,6 +357,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const ui = new UI(); //instance of the class UI
     const products = new Products();
+
+    //setup Application
+    ui.setupAPP();  //
 
     //get all products
     //products.getProducts().then(data => console.log(data));
@@ -304,9 +383,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }).then(() => {//these buttons load after displayproducts and saveproducts are loaded.
         //pass an arrow fn & in it pass 2 
         ui.getBagButtons(); //call the method from class
+        ui.cartLogic(); //setup another method in the UI class to cater for remove,add or reduce amount of products in the cart -cart overlay
     }); 
     
 });
+
 
 
 
