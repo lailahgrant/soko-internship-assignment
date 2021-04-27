@@ -277,6 +277,39 @@ class UI{
             //this helps us access anything in the class
         });
         // clearCartBtn.addEventListener('click', this.clearCart); //in the call back fn, call a method referencing a btn
+
+        /*cart functionality
+        ________________________*/
+
+        //used event bubbling for the remove btn, increase and decrease icons in the cart-content
+        //event bubble on cartContent
+        //add an event listener looking for click events,run a call back fn, as a call back fn - get an event as an argument for accessing remove btn, increase and decrease icon
+        cartContent.addEventListener('click', event => {
+            //console.log(event.target); //returns the items html and classes clicked on like remove btn, increase and decrease icon
+            if (event.target.classList.contains('remove-item')) //use classes on those items to target them
+            {
+                let removeItem = event.target;
+                //console.log(removeItem); //returns remove btn html
+
+                //get id to use to remove iitem
+                let id = removeItem.dataset.id;
+
+                 //remove item from the DOM - item is removed from the bag number count, on refresh - item is nolonger in the cart content
+                //console.log(removeItem.parentElement.parentElement);
+                cartContent.removeChild(removeItem.parentElement.parentElement);
+
+                // call a method of removeItem - it removes item from the cart overlay only
+                this.removeItem(id);
+
+            } else if (event.target.classList.contains('bx-chevron-up')) {
+                let addAmount = event.target;
+                let id = addAmount.dataset.id;
+                //console.log(addAmount); //returns html of the chevron up
+                
+            }
+        });
+
+
     }
 
     //clearCart in the call back fn of event handler above
@@ -286,7 +319,21 @@ class UI{
         let cartItems = cart.map(item => item.id); //getting all items
         //console.log(cartItems);
         //loop through the array with cartItems, call another method(haven't created it yet but will create it next) which will have removing of these items  in the cart
-        cartItems.forEach(id => this.removeItem(id))
+        cartItems.forEach(id => this.removeItem(id));
+
+        //console.log(cartContent.children); //returns the divs of the items when "clear cart" button is pressed
+
+        //to completely remove items from the cart overlay / cart-content
+        //there's a div with cart-content class
+        //use while, DOM documents have the children component
+        while (cartContent.children.length > 0) {
+            //remove content when children are greater than 0
+            cartContent.removeChild(cartContent.children[0]);
+        }
+        //the moment the cart is cleared, hide the cart
+        this.hideCart(); //call this method
+
+
     }
 
     removeItem(id) {
@@ -298,13 +345,21 @@ class UI{
         Storage.saveCart(cart);
         
         //access the buttons of Add to cart from the incart
-        //set another method - for reusing
+        //set another method - for reusing (getSingleButton(id))
         let button = this.getSingleButton(id);
+
+        //if the getSingleButton(id) method is created, the button is assigned as above botton variable - now I disable the button
+        //the specific button
+        button.disabled = false;
+
+        //change the innerHTML 
+        button.innerHTML = `<i class="bx bx-shopping-bag"></i>
+                                Add to bag`;
 
     }
 
-    getSingleButton(id) {
-        return buttonsDOM.find(button => button.dataset.id === id);  
+    getSingleButton(id) { //pass the id got from the removeItem(id) method
+        return buttonsDOM.find(button => button.dataset.id === id);  //this will get the specific button that was used to add an item to the cart
     }
     
 
